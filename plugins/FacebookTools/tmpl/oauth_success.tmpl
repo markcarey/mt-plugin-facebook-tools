@@ -1,0 +1,37 @@
+<mt:include name="include/header.tmpl" page_title="<__trans phrase="Facebook Authorization">">
+
+
+<mt:if name="facebook_screen_name">
+
+ <mt:If name="page_auth">
+
+	<p>Facebook Authorization successful for Facebook Page <strong><a href="http://twitter.com/<mt:var name="facebook_username">" target="_blank"><mt:var name="facebook_username"></a></strong> (<mt:var name="facebook_username">) for <mt:var name="blog_name">.</p>
+
+ <mt:Else>
+
+	<p>Facebook Authorization successful for Facebook user <strong><a href="http://twitter.com/<mt:var name="facebook_screen_name">" target="_blank"><mt:var name="facebook_screen_name"></a></strong> (<mt:var name="facebook_username">) for <mt:var name="blog_name">.</p>
+	
+  <mt:If name="pro"><mt:If name="page_loop">
+	<p><strong>Optional:</strong> Instead of posting to the Facebook profile of the above user, you can instead post to one of the following Facebook Pages. Click on the Page you want to post to, or click Continue to post to the user profile.</p>
+	<ul>
+	<mt:loop name="page_loop"><li><a href="<mt:CGIPath><mt:AdminScript>?__mode=facebook_page_auth&page_id=<mt:var name="id">&blog_id=<mt:var name="blog_id">&return_to=<mt:var name="return_url" encode_url="1">"><img src="http://graph.facebook.com/<mt:var name="id">/picture" /> <mt:var name="name"></a></li></mt:loop>	
+    </ul>
+  </mt:If></mt:If>
+
+ </mt:If>
+
+	
+	    <div class="actions-bar">
+	<div class="actions-bar-inner pkg actions">
+	    <a href="<mt:var name="return_url">" target="_top" class="primary-button"><__trans phrase="Continue"></a>
+	</div>
+</div>
+
+
+<mt:else>
+
+error goes here
+
+</mt:if>
+
+<mt:include name="include/footer.tmpl">

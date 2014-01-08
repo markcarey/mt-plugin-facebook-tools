@@ -1,0 +1,96 @@
+# v1.01 - now using build_file callback - fixes issues with assets not being set to FB and categories not showing in Entry URLs
+# v1.8 - (beta for v2) new features for commenter auth and sharing, plus no more bg task and lead_image_url var support to specify custom share image
+# v1.81 - added 'Share' action link to posted stories on Facebook
+# v1.82 - fix for case where scheduled posts would not get shared  and 'uri_params' error in log (Thanks Ken!)
+# v1.821 - fix for error in 1.82 fix
+# v1.822 - fix for case where FBT is use for commenting with FB app setup at the system level
+# v1.9 - New pro feature: published entries that were not auto-shared when first published will now display a checkbox to post to FB
+name: Facebook Tools Pro
+id: FacebookTools
+key: FacebookTools
+author_link: http://mt-hacks.com/
+author_name: MT Hacks
+description: Auto-shares entries and more Facebook integration features. Pro Version.
+schema_version: 3
+version: 1.9
+plugin_link: http://mt-hacks.com/facebooktools.html
+settings:
+    facebook_application_id:
+    facebook_application_secret:
+    facebook_username:
+        Scope: blog
+    facebook_id:
+        Scope: blog
+    facebook_access_token:
+        Scope: blog
+    auto_share:
+        Scope: blog
+        Default: 0
+    entry_hashtags:
+        Scope: blog
+        Default: 0
+    default_hashtags:
+        Scope: blog
+    filter_cats:
+        Scope: blog
+    filter_tags:
+        Scope: blog
+    tweet_field:
+        Scope: blog
+        Default: title
+    tweet_prefix:
+        Scope: blog
+    never_shorten:
+        Scope: blog
+    shortner_service:
+        Scope: blog
+    shortner_username:
+        Scope: blog
+    shortner_apikey:
+        Scope: blog
+system_config_template: system_config_template.tmpl
+blog_config_template:
+    code: $FacebookTools::FacebookTools::App::CMS::blog_config_template
+config_settings:
+    FacebookToolsApplicationID:
+    FacebookToolsApplicationSecret:
+applications:
+    cms:
+        methods:
+            facebooktools:       $FacebookTools::FacebookTools::App::CMS::facebook_oauth
+            facebook_account:     $FacebookTools::FacebookTools::Pro::App::CMS::facebook_account
+            facebook_page_auth:       $FacebookTools::FacebookTools::Pro::App::CMS::facebook_page_auth
+    comments:
+        methods:
+            fb_login:  $FacebookTools::FacebookTools::Pro::App::Comments::fb_login
+            fb_action:  $FacebookTools::FacebookTools::Pro::App::Comments::fb_action
+callbacks:
+    MT::Entry::pre_save:
+        handler: $FacebookTools::FacebookTools::Callbacks::entry_pre_save
+        priority: 10
+    MT::Entry::post_save:
+        handler: $FacebookTools::FacebookTools::Callbacks::entry_post_save
+        priority: 10
+    build_file: $FacebookTools::FacebookTools::Callbacks::build_file
+    build_page: $FacebookTools::FacebookTools::Callbacks::build_page
+    MT::App::CMS::template_param.edit_author: $FacebookTools::FacebookTools::Pro::Callbacks::users_content_nav
+    MT::App::CMS::template_param.facebook_account: $FacebookTools::FacebookTools::Pro::Callbacks::users_content_nav
+    MT::Comment::post_save:
+        handler: $FacebookTools::FacebookTools::Callbacks::comment_post_save
+    MT::App::CMS::template_param.edit_entry: 
+        handler: $FacebookTools::FacebookTools::Pro::Callbacks::edit_entry
+        priority: 10
+    MT::App::CMS::cms_pre_save.entry: $FacebookTools::FacebookTools::Pro::Callbacks::cms_pre_save_entry
+object_types:
+    entry:
+        facebook_object_id: string meta indexed
+    author:
+        facebook_username: string meta indexed
+        facebook_id: string meta indexed
+        facebook_access_token: string meta
+        facebook_share: integer meta
+commenter_authenticators: $FacebookTools::MT::Auth::FacebookTools::load_auth
+tags:
+    function:
+        FacebookShareCommentOption: $FacebookTools::FacebookTools::Tags::facebook_share_option
+

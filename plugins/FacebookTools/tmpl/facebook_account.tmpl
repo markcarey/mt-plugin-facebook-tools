@@ -1,0 +1,30 @@
+<mt:setvar name="edit_author" value="1">
+<mt:setvar name="facebook_account" value="1">
+<mt:setvarblock name="page_title"><__trans phrase="Facebook Account for"> <mt:var name="username"></mt:setvarblock>
+
+<mt:setvarblock name="system_msg">
+    <mt:if name="authed">
+        <mtapp:statusmsg
+            id="authed"
+            class="info">
+            	<p>Facebook user <strong><a href="http://Facebook.com/<mt:var name="facebook_username">" target="_blank"><mt:var name="facebook_username"></a></strong> has been associated with this user. New entries will be posted to this Facebook account.  To use a different Facebook account or to re-authorize, use the button below.</p>
+        </mtapp:statusmsg>
+    </mt:if>
+</mt:setvarblock>
+
+<mt:setvarblock name="content_nav">
+    <mt:include name="include/users_content_nav.tmpl">
+</mt:setvarblock>
+
+<mt:include name="include/header.tmpl">
+
+<mtapp:setting
+    id="Facebook_aoauth"
+    label="<__trans phrase="Facebook Authorization">"
+    hint="Sign in with Facebook to associate your Facebook account with your MT user account."
+	class="actions-bar"
+    show_hint="1">
+        <a href="<mt:CGIPath><mt:AdminScript>?__mode=facebook_account&amp;start_oauth=1&amp;id=<mt:var name="id">&amp;return_args=__mode%3Dfacebook_account%26id%3D<mt:var name="id">"><img src="<mt:StaticWebPath>plugins/FacebookTools/images/signin_with_facebook.gif" /></a>
+</mtapp:setting>
+
+<mt:include name="include/footer.tmpl">
